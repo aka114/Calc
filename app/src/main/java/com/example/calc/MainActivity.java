@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,8 +26,8 @@ public class MainActivity extends AppCompatActivity {
             inputNumStr = "";
         }
 
-        public void ChangeSign() {
-            if (this.inputNumStr.substring(0, 0) == "-") {
+        public void changeSign() {
+            if (this.inputNumStr.substring(0, 1).equals("-")) {
                 this.inputNumStr = this.inputNumStr.substring(1);
             } else {
                 this.inputNumStr = "-" + this.inputNumStr;
@@ -33,14 +35,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void addSign(String sign) {
-            this.inputNumStr += sign;
+            if (sign != null) {
+                this.inputNumStr += sign;
+            }
         }
 
         public void executeOperation() {
             double inputNum = Double.parseDouble(this.inputNumStr);
-            if (this.operation == 5) {
-                this.result = Math.sqrt(inputNum);
-            } else if (this.operation == 1) {
+            if (this.operation == 1) {
                 this.result = this.result + inputNum;
             } else if (this.operation == 2) {
                 this.result = this.result - inputNum;
@@ -49,16 +51,39 @@ public class MainActivity extends AppCompatActivity {
             } else if (this.operation == 4) {
                 this.result = this.result / inputNum;
             }
+            this.inputNumStr = "" + this.result;
         }
 
         public void setOperation(int operation) {
             this.operation = operation;
+            double inputNum = Double.parseDouble(this.inputNumStr);
+            if (this.operation == 5) {
+                this.result = Math.sqrt(inputNum);
+                this.inputNumStr = "" + this.result;
+            } else {
+                this.result = Double.parseDouble(this.inputNumStr);
+            }
+        }
+
+        public void backspace() {
+            if (inputNumStr.isEmpty()) {
+                return;
+            }
+            inputNumStr = inputNumStr.substring(0, inputNumStr.length() - 1);
+            if (inputNumStr.equals("-")) {
+                inputNumStr = "";
+                return;
+            }
         }
 
         public void reset() {
             result = 0d;
             inputNumStr = "";
             operation = 0;
+        }
+
+        public String getDisplay() {
+            return inputNumStr.equals("") ? "0" : inputNumStr;
         }
     }
 
@@ -70,13 +95,34 @@ public class MainActivity extends AppCompatActivity {
         View display_text = findViewById(R.id.display_text);
 
         Calc calc = new Calc();
-        View layout = getLayoutInflater().inflate(R.layout.calc_activity_main, null);
 
-        Button key_calc = findViewById(R.id.key_calc);
-        Button key_c = findViewById(R.id.key_c);
-        Button key_sqr = findViewById(R.id.key_sqr);
-        Button key_pn = findViewById(R.id.key_pn);
-        Button key_bckp = findViewById(R.id.key_bckp);
+        TextView resultTxt = findViewById(R.id.display_text);
+
+        View.OnClickListener funcKeyClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (view.getId()) {
+                    case R.id.key_calc:
+                        calc.executeOperation();
+                        break;
+                    case R.id.key_bckp:
+                        calc.backspace();
+                        break;
+                    case R.id.key_c:
+                        calc.reset();
+                        break;
+                    case R.id.key_pn:
+                        calc.changeSign();
+                        break;
+                }
+                resultTxt.setText(calc.getDisplay());
+            }
+        };
+
+        findViewById(R.id.key_calc).setOnClickListener(funcKeyClickListener);
+        findViewById(R.id.key_bckp).setOnClickListener(funcKeyClickListener);
+        findViewById(R.id.key_c).setOnClickListener(funcKeyClickListener);
+        findViewById(R.id.key_pn).setOnClickListener(funcKeyClickListener);
 
         Map<Integer, String> numKeyMap = new HashMap();
         numKeyMap.put(R.id.key_0, "0");
@@ -95,21 +141,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 calc.addSign(numKeyMap.get(view.getId()));
+                resultTxt.setText(calc.getDisplay());
             }
         };
-
-        findViewById(R.id.key_0).setOnClickListener(digitClickListener);
-        findViewById(R.id.key_1).setOnClickListener(digitClickListener);
-        findViewById(R.id.key_2).setOnClickListener(digitClickListener);
-        findViewById(R.id.key_3).setOnClickListener(digitClickListener);
-        findViewById(R.id.key_4).setOnClickListener(digitClickListener);
-        findViewById(R.id.key_5).setOnClickListener(digitClickListener);
-        findViewById(R.id.key_6).setOnClickListener(digitClickListener);
-        findViewById(R.id.key_7).setOnClickListener(digitClickListener);
-        findViewById(R.id.key_8).setOnClickListener(digitClickListener);
-        findViewById(R.id.key_9).setOnClickListener(digitClickListener);
-        findViewById(R.id.key_dot).setOnClickListener(digitClickListener);
-
+        for (int key :
+                numKeyMap.keySet()) {
+            findViewById(key).setOnClickListener(digitClickListener);
+        }
 
         Map<Integer, Integer> operKeyMap= new HashMap();
         operKeyMap.put(R.id.key_add, 1);
@@ -122,14 +160,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 calc.setOperation(operKeyMap.get(view.getId()));
+                resultTxt.setText(calc.getDisplay());
             }
         };
-
-        findViewById(R.id.key_add).setOnClickListener(operClickListener);
-        findViewById(R.id.key_sub).setOnClickListener(operClickListener);
-        findViewById(R.id.key_mltp).setOnClickListener(operClickListener);
-        findViewById(R.id.key_div).setOnClickListener(operClickListener);
-        findViewById(R.id.key_sqr).setOnClickListener(operClickListener);
-
+        for (int key :
+                operKeyMap.keySet()) {
+            findViewById(key).setOnClickListener(operClickListener);
+        }
     }
 }
