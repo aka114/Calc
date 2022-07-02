@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
         double result;
         String inputNumStr;
         int operation; // 1 = +; 2 = -; 3 = *; 4 = /; 5 = SQR
+        boolean nextOper = false;
+        DecimalFormat df = new DecimalFormat("####################.####################");
 
         public Calc() {
             result = 0d;
@@ -35,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void addSign(String sign) {
+            if (nextOper) {
+                nextOper = false;
+                this.inputNumStr = "";
+            }
             if (sign != null) {
                 this.inputNumStr += sign;
             }
@@ -51,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
             } else if (this.operation == 4) {
                 this.result = this.result / inputNum;
             }
-            this.inputNumStr = "" + this.result;
+            this.inputNumStr = "" + df.format(this.result);
+            nextOper = true;
         }
 
         public void setOperation(int operation) {
@@ -59,10 +67,11 @@ public class MainActivity extends AppCompatActivity {
             double inputNum = Double.parseDouble(this.inputNumStr);
             if (this.operation == 5) {
                 this.result = Math.sqrt(inputNum);
-                this.inputNumStr = "" + this.result;
+                this.inputNumStr = "" + df.format(this.result);
             } else {
                 this.result = Double.parseDouble(this.inputNumStr);
             }
+            nextOper = true;
         }
 
         public void backspace() {
@@ -80,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
             result = 0d;
             inputNumStr = "";
             operation = 0;
+            nextOper = false;
         }
 
         public String getDisplay() {
