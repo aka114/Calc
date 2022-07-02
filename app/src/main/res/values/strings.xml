@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Calc</string>
     <string name="key_1">1</string>
-    <string name="display_text">1234567890</string>
+    <string name="display_text">0</string>
     <string name="key_2">2</string>
     <string name="key_3">3</string>
     <string name="key_4">4</string>
@@ -17,4 +17,8 @@
     <string name="key_div">/</string>
     <string name="key_sub">-</string>
     <string name="key_add">+</string>
+    <string name="key_c">C</string>
+    <string name="key_sqr">&#8730;</string>
+    <string name="key_pn">+/-</string>
+    <string name="key_bckp"><![CDATA[<-]]></string>
 </resources>
