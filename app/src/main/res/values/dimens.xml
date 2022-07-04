@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="keyButtonTextSize">30sp</dimen>
+    <dimen name="resTextSize">50sp</dimen>
+    <dimen name="buttonCornerRadius">10sp</dimen>
+    <dimen name="buttonHeight">60dp</dimen>
+    <dimen name="buttonMargin">10dp</dimen>
+    <dimen name="calcPadding">10dp</dimen>
+    <dimen name="spaceHeight">150dp</dimen>
+</resources>

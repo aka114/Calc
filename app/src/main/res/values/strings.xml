@@ -18,7 +18,7 @@
     <string name="key_sub">-</string>
     <string name="key_add">+</string>
     <string name="key_c">C</string>
-    <string name="key_sqr">&#8730;</string>
+    <string name="key_sqr">SQR</string>
     <string name="key_pn">+/-</string>
     <string name="key_bckp"><![CDATA[<-]]></string>
 </resources>
